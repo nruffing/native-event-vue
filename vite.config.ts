@@ -15,8 +15,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'lib/main.ts'),
-      name: 'data-grid-vue',
-      fileName: 'data-grid-vue',
+      name: 'native-event-vue',
+      fileName: 'native-event-vue',
     },
     rollupOptions: {
       external: ['vue'],

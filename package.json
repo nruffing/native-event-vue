@@ -1,21 +1,21 @@
 {
-  "name": "vue-lib-template",
+  "name": "native-event-vue",
   "version": "1.0.0",
   "type": "module",
   "private": false,
-  "description": "Template repository for Vue.js library packages intended to be published as an npm package.",
+  "description": "Directives and composables for wiring up and debouncing native HTML events in Vue.",
   "license": "MIT",
   "author": {
     "name": "Nicholas Ruffing",
     "email": "nicholasruffing70@gmail.com"
   },
-  "homepage": "https://github.com/nruffing/vue-lib-template",
+  "homepage": "https://github.com/nruffing/native-event-vue",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nruffing/vue-lib-template.git"
+    "url": "git+https://github.com/nruffing/native-event-vue.git"
   },
   "bugs": {
-    "url": "https://github.com/nruffing/vue-lib-template/issues"
+    "url": "https://github.com/nruffing/native-event-vue/issues"
   },
   "keywords": [],
   "packageManager": "pnpm@8.10.5",
@@ -31,14 +31,14 @@
   "exports": {
     ".": {
       "types": "./dist/types/main.d.ts",
-      "import": "./dist/vue-lib-template.js",
-      "require": "./dist/vue-lib-template.umd.cjs"
+      "import": "./dist/native-event-vue.js",
+      "require": "./dist/native-event-vue.umd.cjs"
     }
   },
   "types": "./dist/types/main.d.ts",
-  "main": "dist/vue-lib-template.umd.js",
-  "module": "dist/vue-lib-template.mjs",
-  "browser": "dist/vue-lib-template.umd.js",
+  "main": "dist/native-event-vue.umd.js",
+  "module": "dist/native-event-vue.mjs",
+  "browser": "dist/native-event-vue.umd.js",
   "scripts": {
     "dev": "pnpm --parallel dev",
     "build": "pnpm type-check && pnpm build-only && pnpm build-types",

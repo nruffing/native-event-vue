@@ -5,6 +5,7 @@
   "words": [
     "allowcolumnreorder",
     "clickanalytics",
+    "composables",
     "datagridvue",
     "docsearch",
     "gapi",
@@ -21,6 +22,15 @@
     "vuepress",
     "xmldocmd"
   ],
-  "ignoreWords": ["datagrid", "Freepik"],
-  "ignorePaths": ["**/test-data", "**/demo-data", "**tsconfig**", "./typedoc-out.json", "**/pnpm-lock.yaml"]
+  "ignoreWords": [
+    "datagrid",
+    "Freepik"
+  ],
+  "ignorePaths": [
+    "**/test-data",
+    "**/demo-data",
+    "**tsconfig**",
+    "./typedoc-out.json",
+    "**/pnpm-lock.yaml"
+  ]
 }

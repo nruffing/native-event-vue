@@ -1,3 +1,3 @@
-# vue-lib-template
+# native-event-vue
 
-Template repository for Vue.js library packages intended to be published as an npm package.
+Directives and composables for wiring up and debouncing native HTML events in Vue.

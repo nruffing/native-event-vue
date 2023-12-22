@@ -11,7 +11,7 @@ permissions:
 
 env:
   VERSION: ''
-  PACKAGE_NAME: 'vue-lib-template'
+  PACKAGE_NAME: 'native-event-vue'
 
 jobs:
 

@@ -1,5 +1,3 @@
-// import { DataType, type Column, type ColumnFilterOptions, type FieldValueGetter, Field, type PageData, EmptyPageData } from './DataGridVue'
+import { useDebounce, type FunctionToDebounce, type DebouncedFunction } from './composables/useDebounce'
 
-// export {
-//   DataGridVue,
-// }
+export { useDebounce, type FunctionToDebounce, type DebouncedFunction }

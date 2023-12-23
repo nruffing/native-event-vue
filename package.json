@@ -46,6 +46,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
     "ci-all": "pnpm i && pnpm run --recursive build",
+    "test": "vitest",
     "format": "pnpm exec prettier --write \"./**/*.{ts,json,vue,css}\"",
     "upgrade-all": "ncu --upgrade",
     "check-upgrade-all": "clear && ncu",
@@ -74,6 +75,7 @@
     "tslib": "^2.6.2",
     "typescript": "~5.3.3",
     "vite": "^5.0.10",
+    "vitest": "^1.1.0",
     "vue": "^3.3.13",
     "vue-router": "^4.2.5",
     "vue-tsc": "^1.8.25"

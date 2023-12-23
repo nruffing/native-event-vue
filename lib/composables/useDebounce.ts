@@ -1,3 +1,5 @@
+import { log } from '../logger'
+
 export type FunctionToDebounce = (...args: any[]) => unknown
 
 export type DebouncedFunction = {
@@ -6,7 +8,7 @@ export type DebouncedFunction = {
   flush(): void
 }
 
-export function useDebounce<TReturn>(func: FunctionToDebounce, timeoutMs: number): DebouncedFunction {
+export function useDebounce(func: FunctionToDebounce, timeoutMs: number): DebouncedFunction {
   let timeoutId: number | undefined = undefined
   let lastArgs: any[] | undefined = undefined
 
@@ -15,9 +17,10 @@ export function useDebounce<TReturn>(func: FunctionToDebounce, timeoutMs: number
     window.clearTimeout(timeoutId)
 
     timeoutId = window.setTimeout(() => {
+      log('useDebounce | timeout reached', lastArgs)
+      func(lastArgs)
       lastArgs = undefined
       timeoutId = undefined
-      func(args)
     }, timeoutMs)
   }
 

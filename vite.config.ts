@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { fileURLToPath, URL } from 'node:url'
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
@@ -26,6 +28,12 @@ export default defineConfig({
         },
       },
       plugins: [del({ targets: ['dist/favicon.svg', 'dist/favicon.ico'], hook: 'generateBundle' })],
+    },
+  },
+  test: {
+    browser: {
+      enabled: true,
+      name: 'chrome',
     },
   },
 })

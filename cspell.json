@@ -20,17 +20,9 @@
     "showcolumnselection",
     "vnode",
     "vuepress",
+    "webdriverio",
     "xmldocmd"
   ],
-  "ignoreWords": [
-    "datagrid",
-    "Freepik"
-  ],
-  "ignorePaths": [
-    "**/test-data",
-    "**/demo-data",
-    "**tsconfig**",
-    "./typedoc-out.json",
-    "**/pnpm-lock.yaml"
-  ]
+  "ignoreWords": ["datagrid", "Freepik"],
+  "ignorePaths": ["**/test-data", "**/demo-data", "**tsconfig**", "./typedoc-out.json", "**/pnpm-lock.yaml"]
 }

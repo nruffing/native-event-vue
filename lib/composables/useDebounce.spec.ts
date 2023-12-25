@@ -1,4 +1,5 @@
-import { expect, test } from 'vitest'
+import { expect, test, describe } from 'vitest'
+import { expectTimestampCloseEnough } from '../../test-util/timestampUtil'
 import { useDebounce } from './useDebounce'
 import { log } from '../logger'
 
@@ -13,51 +14,87 @@ interface DebounceTestActualCall {
   args: any[]
 }
 
-test('useDebounce debounces', async () => {
-  const calls = [
-    { delay: 0, arg1: 'a', arg2: 1 },
-    { delay: 50, arg1: 'b', arg2: 2 },
-    { delay: 110, arg1: 'c', arg2: 3 },
-  ] as DebounceTestCall[]
-  const actualCalls = [] as DebounceTestActualCall[]
+interface DebounceTestExpectedCall {
+  timestampOffset: number
+  args: any[]
+}
 
-  const debounceTestFunction = (arg1: string, arg2: number) => {
-    const call = { timestamp: new Date().getTime(), args: [arg1, arg2] }
-    log('useDebounce.spec | debounced function actually called', call)
-    actualCalls.push(call)
-  }
+describe('useDebounce', () => {
+  test('successfully debounces', async () => {
+    const debounceMs = 100
 
-  const debounced = useDebounce(debounceTestFunction, 100)
-  const expectedActualCallAmount = 1
+    const calls = [
+      { delay: 0, arg1: 'a', arg2: 1 },
+      { delay: 10, arg1: 'a', arg2: 1 },
+      { delay: 10, arg1: 'a', arg2: 1 },
+      { delay: 10, arg1: 'a', arg2: 1 },
+      { delay: 50, arg1: 'b', arg2: 2 },
+      { delay: 110, arg1: 'c', arg2: 3 },
+    ] as DebounceTestCall[]
 
-  const callNext = () => {
-    if (!calls.length) {
-      return Promise.resolve()
+    const expected = [
+      { timestampOffset: 180, args: ['b', 2] },
+      { timestampOffset: 310, args: ['c', 3] },
+    ] as DebounceTestExpectedCall[]
+
+    const actualCalls = [] as DebounceTestActualCall[]
+
+    const debounceTestFunction = (arg1: string, arg2: number) => {
+      const call = { timestamp: new Date().getTime(), args: [arg1, arg2] }
+      log('useDebounce.spec | debounced function actually called', call)
+      actualCalls.push(call)
     }
 
-    const call = calls.shift()
-    if (!call) {
-      return Promise.resolve()
+    const debounced = useDebounce(debounceTestFunction, debounceMs)
+
+    const callNext = () => {
+      if (!calls.length) {
+        return Promise.resolve()
+      }
+
+      const call = calls.shift()
+      if (!call) {
+        return Promise.resolve()
+      }
+
+      return new Promise<void>(resolve => {
+        setTimeout(async () => {
+          log('useDebounce.spec | calling debounced function', call)
+          debounced!(call.arg1, call.arg2)
+          await callNext()
+          resolve()
+        }, call.delay)
+      })
     }
 
-    return new Promise<void>(resolve => {
-      setTimeout(async () => {
-        log('useDebounce.spec | calling debounced function', { call, harness: this })
-        debounced!(call.arg1, call.arg2, this)
-        await callNext()
-        resolve()
-      }, call.delay)
-    })
-  }
+    const timestampStart = new Date().getTime()
+    log('useDebounce.spec | start test', { calls, actualCalls })
+    await callNext()
+    await new Promise(resolve => setTimeout(resolve, debounceMs + 20))
+    log('useDebounce.spec | end test', { calls, actualCalls })
 
-  log('useDebounce.spec | start test', { calls, actualCalls })
-  await callNext()
-  log('useDebounce.spec | end test', { calls, actualCalls })
+    expect(actualCalls.length).toEqual(expected.length)
 
-  expect(actualCalls.length).toEqual(expectedActualCallAmount)
+    for (let i = 0; i < expected.length; i++) {
+      const actualCall = actualCalls[i]
+      const expectedCall = expected[i]
 
-  // expect(actualCalls).toEqual([
-  //   { timestamp: 100, args: ['c', 3] },
-  //   { timestamp: 500, args: ['j', 10] },
-  // ])
+      expectTimestampCloseEnough(actualCall.timestamp, expectedCall.timestampOffset + timestampStart)
+      expect(actualCall.args).toEqual(expectedCall.args)
+    }
+  })
+
+  test('throws when func is not provided', () => {
+    expect(() => useDebounce(undefined as any, 100)).toThrow()
+    expect(() => useDebounce(null as any, 100)).toThrow()
+  })
+
+  test('throws when timeoutMs is not provided', () => {
+    expect(() => useDebounce(() => {}, undefined as any)).toThrow()
+    expect(() => useDebounce(() => {}, null as any)).toThrow()
+  })
+
+  test('throws when timeoutMs is negative', () => {
+    expect(() => useDebounce(() => {}, -1)).toThrow()
+  })
 })

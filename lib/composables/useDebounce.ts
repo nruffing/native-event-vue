@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import { log } from '../logger'
 import { useEnsure } from './useEnsure'
 
@@ -8,6 +8,7 @@ export type DebouncedFunction = {
   (...args: any[]): unknown
   clear(): void
   flush(): void
+  destroy(): void
 }
 
 export function useDebounce(func: FunctionToDebounce | EventListenerObject, timeoutMs: number): DebouncedFunction {
@@ -17,6 +18,7 @@ export function useDebounce(func: FunctionToDebounce | EventListenerObject, time
 
   const timeoutId = ref<number | undefined>(undefined)
   const lastArgs = ref<any[] | undefined>(undefined)
+  const isDestroyed = ref(false)
 
   const execute = () => {
     if (lastArgs.value) {
@@ -35,6 +37,10 @@ export function useDebounce(func: FunctionToDebounce | EventListenerObject, time
   }
 
   const debounced = (...args: any[]) => {
+    if (isDestroyed.value) {
+      return
+    }
+
     lastArgs.value = args
     window.clearTimeout(timeoutId.value)
 
@@ -53,6 +59,18 @@ export function useDebounce(func: FunctionToDebounce | EventListenerObject, time
     log('useDebounce | flush', lastArgs.value)
     execute()
   }
+
+  debounced.destroy = () => {
+    log('useDebounce | destroy', {})
+    clear()
+    isDestroyed.value = true
+  }
+
+  onBeforeUnmount(() => {
+    if (!isDestroyed.value) {
+      debounced.destroy()
+    }
+  })
 
   return debounced
 }

@@ -163,13 +163,13 @@ describe('useDebounce', () => {
   })
 
   test('throws when func is not provided', () => {
-    expect(() => useDebounce(undefined as any, 100)).toThrow()
-    expect(() => useDebounce(null as any, 100)).toThrow()
+    expect(() => useDebounce(undefined!, 100)).toThrow()
+    expect(() => useDebounce(null!, 100)).toThrow()
   })
 
   test('throws when timeoutMs is not provided', () => {
-    expect(() => useDebounce(() => {}, undefined as any)).toThrow()
-    expect(() => useDebounce(() => {}, null as any)).toThrow()
+    expect(() => useDebounce(() => {}, undefined!)).toThrow()
+    expect(() => useDebounce(() => {}, null!)).toThrow()
   })
 
   test('throws when timeoutMs is negative', () => {

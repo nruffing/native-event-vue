@@ -1,0 +1,580 @@
+/* Modified from https://github.com/istanbuljs/istanbuljs/blob/5584b50305a6a17d3573aea25c84e254d4a08b65/packages/istanbul-reports/lib/html/assets/base.css */
+
+:root {
+  --color-base-1000: #000;
+  --color-base-900: #111;
+  --color-base-850: #222;
+  --color-base-800: #333;
+  --color-base-700: #555;
+  --color-base-600: #888;
+  --color-base-550: #999;
+  --color-base-500: #aaa;
+  --color-base-400: #bbb;
+  --color-base-350: #ccc;
+  --color-base-300: #ddd;
+  --color-base-100: #e8e8e8;
+  --color-base-000: #fff;
+
+  --color-red-light: #fce1e5;
+  --color-red-medium: #f6c6ce;
+  --color-red-dark: #c21f39;
+
+  --color-green-light: #e6f5d0;
+  --color-green-medium: #a1d76a;
+  --color-green-dark: #4d9221;
+
+  --color-yellow-light: #fff4c2;
+  --color-yellow: #ffff00;
+  --color-yellow-dark: #f9cd0b;
+
+  --color-blue: #0074d9;
+}
+
+:root {
+  --color-background: var(--color-base-000);
+  --color-text: var(--color-base-800);
+  --color-link: var(--color-blue);
+  --color-link-visited: var(--color-base-800);
+  --color-quiet: #00000080;
+  --color-fraction: var(--color-base-700);
+  --color-fraction-background: var(--color-base-100);
+  --color-coverage-summary-text: var(--color-text);
+  --color-coverage-summary-link: var(--color-link);
+  --border-coverage-summary: 1px solid var(--color-base-400);
+  --color-empty: var(--less-light);
+  --color-empty-background: var(--color-base-000);
+  --border-keyline: 1px solid var(--color-base-300);
+  --color-ignore: var(--color-base-550);
+
+  --color-missing: var(--color-yellow);
+  --color-missing-background: var(--color-base-800);
+
+  --color-skip: var(--color-base-000);
+  --color-skip-background: var(--color-base-350);
+
+  --color-branch-no: var(--color-base-900);
+  --color-branch-no-background: var(--color-yellow);
+
+  --color-line-neutral: var(--color-base-100);
+  --color-line-no-background: var(--color-red-light);
+
+  --color-stat-yes-background: var(--color-green-medium);
+  --color-stat-medium-background: var(--color-yellow-dark);
+  --color-stat-skip: var(--color-base-900);
+  --color-stat-skip-background: var(--color-base-300);
+
+  --color-low: var(--color-red-dark);
+  --border-low: 1px solid var(--color-low);
+
+  --color-medium: var(--color-red-medium);
+  --color-medium-background: var(--color-yellow-light);
+  --border-medium: 1px solid var(--color-yellow-dark);
+
+  --color-high: var(--color-green-light);
+  --color-high-background: var(--color-green-dark);
+  --border-high: 1px solid var(--color-green-dark);
+
+  --color-pre-background: var(--color-background);
+  --color-pre-link: var(--color-link);
+  --color-pre-pln: var(--color-base-1000);
+  --color-pre-kwd: #008;
+  --color-pre-pun: #660;
+  --color-pre-str: #080;
+  --color-pre-typ: #606;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* match vitest-ui where possible */
+
+    --color-base-900: #141414;
+
+    --color-red-light: #db889a;
+    --color-red-medium: #bd8f8f;
+    --color-red-dark: #ab5e3f;
+
+    --color-green-light: #429988;
+    --color-green-medium: #4d9375;
+    --color-green-dark: #1c6b48;
+
+    --color-yellow-light: #ffc675;
+    --color-yellow: #db8e40;
+    --color-yellow-dark: #b96e21;
+
+    --color-blue: #00c5d9;
+    --color-blue-dark: #0028ff;
+  }
+
+  :root {
+    --color-background: var(--color-base-900);
+    --color-text: var(--color-base-300);
+    --color-quiet: var(--color-base-500);
+    --color-fraction: var(--color-base-400);
+    --color-fraction-background: var(--color-base-700);
+    --color-coverage-summary-text: var(--color-base-700);
+    --color-coverage-summary-link: var(--color-blue-dark);
+    --border-coverage-summary: 1px solid var(--color-base-600);
+    --color-empty-background: var(--color-base-400);
+
+    --color-pre-background: var(--color-base-850);
+    --color-line-neutral: var(--color-base-800);
+    /* from VS Code dark plus theme | https://github.com/microsoft/vscode/blob/cc4775f55aff152db2417dfaaddc643ee90b31f9/extensions/theme-defaults/themes/dark_plus.json */
+    --color-pre-pln: #9cdcfe;
+    --color-pre-kwd: #c586c0;
+    --color-pre-pun: #dcdcaa;
+    --color-pre-str: #ce9178;
+    --color-pre-typ: #4ec9b0;
+  }
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--color-background);
+}
+
+body {
+  font-family:
+    Helvetica Neue,
+    Helvetica,
+    Arial;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.small {
+  font-size: 12px;
+}
+
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+h2 {
+  font-size: 14px;
+}
+
+pre {
+  font:
+    12px/1.4 Consolas,
+    'Liberation Mono',
+    Menlo,
+    Courier,
+    monospace;
+  margin: 0;
+  padding: 10px 0 0 0;
+  -moz-tab-size: 2;
+  -o-tab-size: 2;
+  tab-size: 2;
+  background: var(--color-pre-background);
+}
+
+pre a {
+  color: var(--color-pre-link);
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+pre .pln {
+  color: var(--color-pre-pln);
+}
+
+pre .kwd {
+  color: var(--color-pre-kwd);
+}
+
+pre .pun {
+  color: var(--color-pre-pun);
+}
+
+pre .str {
+  color: var(--color-pre-str);
+}
+
+pre .typ {
+  color: var(--color-pre-typ);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.strong {
+  font-weight: bold;
+}
+
+.space-top1 {
+  padding: 10px 0 0 0;
+}
+
+.pad2y {
+  padding: 20px 0;
+}
+
+.pad1y {
+  padding: 10px 0;
+}
+
+.pad2x {
+  padding: 0 20px;
+}
+
+.pad2 {
+  padding: 20px;
+}
+
+.pad1 {
+  padding: 10px;
+}
+
+.space-left2 {
+  padding-left: 55px;
+}
+
+.space-right2 {
+  padding-right: 20px;
+}
+
+.center {
+  text-align: center;
+}
+
+.clearfix {
+  display: block;
+}
+
+.clearfix:after {
+  content: '';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.fl {
+  float: left;
+}
+
+@media only screen and (max-width: 640px) {
+  .col3 {
+    width: 100%;
+    max-width: 100%;
+  }
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+.quiet {
+  color: var(--color-quiet);
+}
+
+.quiet a {
+  opacity: 0.7;
+}
+
+.fraction {
+  font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-size: 10px;
+  color: var(--color-fraction);
+  background: var(--color-fraction-background);
+  padding: 4px 5px;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+
+div.path a:link,
+div.path a:visited {
+  color: var(--color-link-visited);
+}
+
+table.coverage {
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+}
+
+table.coverage td {
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+}
+
+table.coverage td.line-count {
+  text-align: right;
+  padding: 0 5px 0 20px;
+}
+
+table.coverage td.line-coverage {
+  text-align: right;
+  padding-right: 10px;
+  min-width: 20px;
+}
+
+table.coverage td span.cline-any {
+  display: inline-block;
+  padding: 0 5px;
+  width: 100%;
+}
+
+.missing-if-branch {
+  display: inline-block;
+  margin-right: 5px;
+  border-radius: 3px;
+  position: relative;
+  padding: 0 4px;
+  background: var(--color-missing-background);
+  color: var(--color-missing);
+}
+
+.skip-if-branch {
+  display: none;
+  margin-right: 10px;
+  position: relative;
+  padding: 0 4px;
+  background: var(--color-skip-background);
+  color: var(--color-skip);
+}
+
+.missing-if-branch .typ,
+.skip-if-branch .typ {
+  color: inherit !important;
+}
+
+.coverage-summary {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.coverage-summary tbody {
+  color: var(--color-coverage-summary-text);
+}
+
+.coverage-summary tr {
+  border-bottom: var(--border-coverage-summary);
+}
+
+.keyline-all {
+  border: var(--border-keyline);
+}
+
+.coverage-summary td,
+.coverage-summary th {
+  padding: 10px;
+}
+
+.coverage-summary tbody {
+  border: var(--border-coverage-summary);
+}
+
+.coverage-summary tbody a {
+  color: var(--color-coverage-summary-link);
+}
+
+.coverage-summary td {
+  border-right: var(--border-coverage-summary);
+}
+
+.coverage-summary td:last-child {
+  border-right: none;
+}
+
+.coverage-summary th {
+  text-align: left;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+.coverage-summary th.file {
+  border-right: none !important;
+}
+
+.coverage-summary th.pic,
+.coverage-summary th.abs,
+.coverage-summary td.pct,
+.coverage-summary td.abs {
+  text-align: right;
+}
+
+.coverage-summary td.file {
+  white-space: nowrap;
+}
+
+.coverage-summary td.pic {
+  min-width: 120px !important;
+}
+
+.coverage-summary .sorter {
+  height: 10px;
+  width: 7px;
+  display: inline-block;
+  margin-left: 0.5em;
+  background: url(sort-arrow-sprite.png) no-repeat scroll 0 0 transparent;
+}
+
+.coverage-summary .sorted .sorter {
+  background-position: 0 -20px;
+}
+
+.coverage-summary .sorted-desc .sorter {
+  background-position: 0 -10px;
+}
+
+.status-line {
+  height: 10px;
+}
+
+/* yellow */
+.cbranch-no {
+  background: var(--color-branch-no-background) !important;
+  color: var(--color-branch-no);
+}
+
+/* dark red */
+.red.solid,
+.status-line.low,
+.low .cover-fill {
+  background: var(--color-low);
+}
+
+.low .chart {
+  border: var(--border-low);
+}
+
+.highlighted,
+.highlighted .cstat-no,
+.highlighted .fstat-no,
+.highlighted .cbranch-no {
+  background: var(--border-low) !important;
+}
+
+/* medium red */
+.cstat-no,
+.fstat-no,
+.cbranch-no,
+.cbranch-no {
+  background: var(--color-medium);
+}
+
+/* light red */
+.low,
+.cline-no {
+  background: var(--color-line-no-background);
+}
+
+/* light green */
+.high,
+.cline-yes {
+  background: var(--color-high);
+}
+
+/* medium green */
+.cstat-yes {
+  background: var(--color-stat-yes-background);
+}
+
+/* dark green */
+.status-line.high,
+.high .cover-fill {
+  background: var(--color-high-background);
+}
+
+.high .chart {
+  border: var(--border-high);
+}
+
+/* dark yellow (gold) */
+.status-line.medium,
+.medium .cover-fill {
+  background: var(--color-stat-medium-background);
+}
+
+.medium .chart {
+  border: var(--border-medium);
+}
+
+/* light yellow */
+.medium {
+  background: var(--color-medium-background);
+}
+
+.cstat-skip {
+  background: var(--color-stat-skip-background);
+  color: var(--color-stat-skip);
+}
+
+.fstat-skip,
+.cbranch-skip {
+  background: var(--color-stat-skip-background);
+  color: var(--color-stat-skip) !important;
+}
+
+span.cline-neutral {
+  background: var(--color-line-neutral);
+}
+
+.coverage-summary td.empty {
+  opacity: 0.5;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  line-height: 1;
+  color: var(--color-empty);
+}
+
+.cover-fill,
+.cover-empty {
+  display: inline-block;
+  height: 12px;
+}
+
+.chart {
+  line-height: 0;
+}
+
+.cover-empty {
+  background: var(--color-empty-background);
+}
+
+.cover-full {
+  border-right: none !important;
+}
+
+pre.prettyprint {
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.com {
+  color: #999 !important;
+}
+
+.ignore-none {
+  color: var(--color-ignore);
+  font-weight: normal;
+}
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -48px;
+}
+.footer,
+.push {
+  height: 48px;
+}

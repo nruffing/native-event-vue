@@ -39,5 +39,8 @@ export default defineConfig({
       include: ['lib/**/*.ts'],
       all: true,
     },
+    typecheck: {
+      enabled: true,
+    },
   },
 })

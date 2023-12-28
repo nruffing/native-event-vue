@@ -35,6 +35,7 @@ jobs:
         cache: 'pnpm'
     - run: pnpm run ci-all
     - run: pnpm test
+    - run: pnpm run test:e2e
 
   # build_and_publish:
   #   runs-on: ubuntu-latest

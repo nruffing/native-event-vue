@@ -40,7 +40,9 @@ export default defineConfig({
       provider: 'istanbul',
       reporter: ['text', 'json', 'html'],
       include: ['lib/**/*.ts'],
+      exclude: ['lib/**/*.spec.ts'],
       all: true,
+      reportsDirectory: 'coverage-unit',
     },
     typecheck: {
       enabled: true,

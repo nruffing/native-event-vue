@@ -1,6 +1,9 @@
 <template>
   <main>
-    <input v-native-event="{ event: 'input', listener }" />
+    <input
+      id="input"
+      v-native-event="{ event: 'input', listener }"
+    />
     <span id="input-value">{{ inputValue }}</span>
   </main>
 </template>

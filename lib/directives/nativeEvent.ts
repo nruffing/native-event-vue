@@ -12,7 +12,7 @@ export interface NativeEventOptions {
 
 const eventPropNamePrefix = 'native-event-vue-'
 
-export const nativeEvent = {
+export const nativeEventDirective = {
   beforeMount: (
     domEl: HTMLElement,
     binding: DirectiveBinding<NativeEventOptions>,
@@ -24,7 +24,7 @@ export const nativeEvent = {
     }
 
     addEventListener(domEl, binding, true)
-    log('native-event | beforeMount', { domEl, options: binding.value })
+    log('native-event | beforeMount', { domEl, binding: binding.value })
   },
   updated: (
     domEl: HTMLElement,
@@ -33,11 +33,10 @@ export const nativeEvent = {
     prevVnode: VNode<any, HTMLElement> | null,
   ) => {
     if (binding.value.disabled) {
-      removeEventListener(domEl, binding)
-    } else if (el.getAttribute('draggable') !== 'true') {
-      setupDrag(el, binding.value)
+      return removeEventListener(domEl, binding)
     }
-    log('native-event | updated', { domEl, options: binding.value })
+    addEventListener(domEl, binding, false)
+    log('native-event | updated', { domEl, binding: binding.value })
   },
   beforeUnmount: (
     domEl: HTMLElement,
@@ -45,10 +44,8 @@ export const nativeEvent = {
     vnode: VNode<any, HTMLElement>,
     prevVnode: VNode<any, HTMLElement> | null,
   ) => {
-    // remove drag events
-    removeEventHandler(el, 'dragstart', opts)
-    removeEventHandler(el, 'dragend', opts)
-    log({ eventName: 'drag | beforeUnmount', domEl: el, dragOpts: binding.value, opts })
+    removeEventListener(domEl, binding)
+    log('native-event | beforeUnmount', { domEl, binding: binding.value })
   },
 }
 
@@ -56,10 +53,16 @@ function addEventListener(domEl: HTMLElement, binding: DirectiveBinding<NativeEv
   if (replaceExisting) {
     removeEventListener(domEl, binding)
   }
+
   const domAny = domEl as any
   const propKey = `${eventPropNamePrefix}${binding.value.event}`
+
+  if (!replaceExisting && domAny[propKey]) {
+    return
+  }
+
   domAny[propKey] = useNativeEvent(domEl, binding.value.event, binding.value.listener, binding.value.options, binding.value.debounceMs)
-  log('native-event | event listener added', { domEl, options: binding.value })
+  log('native-event | event listener added', { domEl, binding: binding.value, replaceExisting })
 }
 
 function removeEventListener(domEl: HTMLElement, binding: DirectiveBinding<NativeEventOptions>) {
@@ -69,6 +72,6 @@ function removeEventListener(domEl: HTMLElement, binding: DirectiveBinding<Nativ
   if (nativeEvent) {
     nativeEvent?.destroy()
     domAny[propKey] = undefined
-    log('native-event | event listener removed', { domEl, options: binding.value })
+    log('native-event | event listener removed', { domEl, binding: binding.value })
   }
 }

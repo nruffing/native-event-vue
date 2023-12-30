@@ -9,9 +9,3 @@ export default defineComponent({
   name: 'HomeView',
 })
 </script>
-
-<style scoped>
-main > div {
-  height: 100%;
-}
-</style>

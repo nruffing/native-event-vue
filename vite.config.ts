@@ -29,6 +29,9 @@ export default defineConfig({
     },
   },
   test: {
+    env: {
+      NATIVE_EVENT_VUE_DEBUG_LOG: 'true',
+    },
     browser: {
       enabled: true,
       name: 'chrome',

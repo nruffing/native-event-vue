@@ -1,4 +1,4 @@
-import { onBeforeUnmount, ref } from 'vue'
+import { ref } from 'vue'
 import { log } from '../logger'
 import { useEnsure } from './useEnsure'
 
@@ -65,12 +65,6 @@ export function useDebounce(func: FunctionToDebounce | EventListenerObject, time
     clear()
     isDestroyed.value = true
   }
-
-  onBeforeUnmount(() => {
-    if (!isDestroyed.value) {
-      debounced.destroy()
-    }
-  })
 
   return debounced
 }

@@ -1,6 +1,6 @@
-import { ref, onBeforeUnmount } from 'vue'
+import { ref } from 'vue'
 import { useEnsure } from './useEnsure'
-import { useDebounce } from './useDebounce'
+import { useDebounce, type DebouncedFunction } from './useDebounce'
 import { log } from '../logger'
 
 export function useNativeEvent(
@@ -22,11 +22,12 @@ export function useNativeEvent(
   const listenerRef = ref(listener)
 
   const removeListener = () => {
+    if (debounceMs) {
+      ;(listenerRef.value as DebouncedFunction).destroy()
+    }
     domEl.removeEventListener(event, listenerRef.value, options)
     log('useNativeEvent | event listener removed', { domEl, event, options, debounceMs })
   }
-
-  onBeforeUnmount(removeListener)
 
   if (debounceMs) {
     const debounced = useDebounce(listener, debounceMs)
@@ -37,4 +38,6 @@ export function useNativeEvent(
   domEl.addEventListener(event, listenerRef.value, options)
 
   log('useNativeEvent | event listener added', { domEl, event, options, debounceMs })
+
+  return { destroy: removeListener }
 }

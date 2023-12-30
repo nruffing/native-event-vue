@@ -20,7 +20,7 @@ export const nativeEvent = {
       return
     }
 
-    useNativeEvent(domEl, binding.value.event, binding.value.listener, binding.value.options, binding.value.debounceMs)
+    useNativeEvent(domEl, binding.value.event, binding.value.listener, binding.value.options, binding.value.debounceMs, false)
 
     log('native-event | beforeMount', { domEl, options: binding.value })
   },

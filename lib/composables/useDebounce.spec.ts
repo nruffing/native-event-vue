@@ -54,7 +54,7 @@ async function executeDebounceTest(calls: DebounceTestCall[], debounceMs: number
         } else if (call.isDestroy) {
           debounced!.destroy()
         } else if (!call.isJustDelay) {
-          debounced!(call.arg1, call.arg2)
+          await debounced!(call.arg1, call.arg2)
         }
         await callNext()
         resolve()

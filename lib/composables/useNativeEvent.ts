@@ -9,6 +9,7 @@ export function useNativeEvent(
   listener: EventListenerOrEventListenerObject,
   options?: boolean | AddEventListenerOptions,
   debounceMs?: number,
+  removeBeforeUnmount: boolean = true,
 ) {
   const ensure = useEnsure('useNativeEvent')
   ensure.ensureExists(domEl, 'domEl')
@@ -26,7 +27,9 @@ export function useNativeEvent(
     log('useNativeEvent | event listener removed', { domEl, event, options, debounceMs })
   }
 
-  onBeforeUnmount(removeListener)
+  if (removeBeforeUnmount) {
+    onBeforeUnmount(removeListener)
+  }
 
   if (debounceMs) {
     const debounced = useDebounce(listener, debounceMs)
@@ -37,4 +40,6 @@ export function useNativeEvent(
   domEl.addEventListener(event, listenerRef.value, options)
 
   log('useNativeEvent | event listener added', { domEl, event, options, debounceMs })
+
+  return { removeListener }
 }

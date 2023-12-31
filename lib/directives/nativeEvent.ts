@@ -1,6 +1,7 @@
 import type { DirectiveBinding, VNode } from 'vue'
 import { log } from '../logger'
 import { useNativeEvent } from '../composables/useNativeEvent'
+import { resolveEventPropNamePrefix } from '../NativeEventVue'
 
 export interface NativeEventOptions {
   event: string
@@ -9,8 +10,6 @@ export interface NativeEventOptions {
   debounceMs?: number
   disabled?: boolean | null | undefined
 }
-
-const eventPropNamePrefix = 'native-event-vue-'
 
 export const nativeEventDirective = {
   beforeMount: (
@@ -50,28 +49,12 @@ export const nativeEventDirective = {
 }
 
 function addEventListener(domEl: HTMLElement, binding: DirectiveBinding<NativeEventOptions>, replaceExisting: boolean) {
-  if (replaceExisting) {
-    removeEventListener(domEl, binding)
-  }
-
-  const domAny = domEl as any
-  const propKey = `${eventPropNamePrefix}${binding.value.event}`
-
-  if (!replaceExisting && domAny[propKey]) {
-    return
-  }
-
-  domAny[propKey] = useNativeEvent(domEl, binding.value.event, binding.value.listener, binding.value.options, binding.value.debounceMs)
-  log('native-event | event listener added', { domEl, binding: binding.value, replaceExisting })
+  useNativeEvent(domEl, binding.value.event, binding.value.listener, binding.value.options, binding.value.debounceMs, replaceExisting)
+  //log('native-event | event listener added', { domEl, binding: binding.value, replaceExisting })
 }
 
 function removeEventListener(domEl: HTMLElement, binding: DirectiveBinding<NativeEventOptions>) {
-  const domAny = domEl as any
-  const propKey = `${eventPropNamePrefix}${binding.value.event}`
-  const nativeEvent = domAny[propKey]
-  if (nativeEvent) {
-    nativeEvent?.destroy()
-    domAny[propKey] = undefined
-    log('native-event | event listener removed', { domEl, binding: binding.value })
-  }
+  const propKey = resolveEventPropNamePrefix(binding.value.event)
+  domEl[propKey]?.destroy()
+  //log('native-event | event listener removed', { domEl, binding: binding.value })
 }

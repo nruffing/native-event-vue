@@ -18,3 +18,15 @@ export default {
     log('installed', {})
   },
 }
+
+export function resolveEnvironmentVariable(varName: string) {
+  return import.meta.env['varName'] ?? import.meta.env['VITE_' + varName]
+}
+
+export function resolveEventPropNamePrefix(event: string) {
+  let prefix = 'native-event-vue-'
+  if (resolveEnvironmentVariable('NATIVE_EVENT_VUE_PROP_NAME_PREFIX')) {
+    prefix = resolveEnvironmentVariable('NATIVE_EVENT_VUE_PROP_NAME_PREFIX').trim()
+  }
+  return `${prefix}${event}`
+}

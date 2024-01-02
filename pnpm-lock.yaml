@@ -76,6 +76,10 @@ importers:
         version: 8.27.0(typescript@5.3.3)
 
   dev-app:
+    dependencies:
+      native-event-vue:
+        specifier: link:..
+        version: link:..
     devDependencies:
       '@babel/types':
         specifier: ^7.23.6
@@ -112,6 +116,10 @@ importers:
         version: 1.8.26(typescript@5.3.3)
 
   e2e:
+    dependencies:
+      native-event-vue:
+        specifier: link:..
+        version: link:..
     devDependencies:
       '@babel/types':
         specifier: ^7.23.6

@@ -4,29 +4,25 @@ import { log } from './logger'
 
 export interface NativeEventVueOptions {
   nativeEventDirectiveName?: string
+  debugLog?: boolean
+  propNamePrefix?: string
 }
 
-export const defaultOptions = {
+export const nativeEventVueOptions = {
   nativeEventDirectiveName: 'native-event',
+  debugLog: false,
+  propNamePrefix: 'native-event-vue-',
 } as NativeEventVueOptions
 
 export default {
-  install: (app: App, options: NativeEventVueOptions = {}) => {
-    const opts = Object.assign({ ...defaultOptions }, options)
+  install: (app: App, opts: NativeEventVueOptions = {}) => {
+    Object.assign(nativeEventVueOptions, opts)
 
-    app.directive(opts.nativeEventDirectiveName!, nativeEventDirective)
+    app.directive(nativeEventVueOptions.nativeEventDirectiveName!, nativeEventDirective)
     log('installed', {})
   },
 }
 
-export function resolveEnvironmentVariable(varName: string) {
-  return import.meta.env['varName'] ?? import.meta.env['VITE_' + varName]
-}
-
 export function resolveEventPropNamePrefix(event: string) {
-  let prefix = 'native-event-vue-'
-  if (resolveEnvironmentVariable('NATIVE_EVENT_VUE_PROP_NAME_PREFIX')) {
-    prefix = resolveEnvironmentVariable('NATIVE_EVENT_VUE_PROP_NAME_PREFIX').trim()
-  }
-  return `${prefix}${event}`
+  return `${nativeEventVueOptions.propNamePrefix}${event}`
 }

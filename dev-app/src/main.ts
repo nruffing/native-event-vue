@@ -1,9 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-// import { DataGridVue } from '../../lib/main'
+import { NativeEventVue } from 'native-event-vue'
 
-createApp(App)
-  .use(router)
-  //.use(DataGridVue)
-  .mount('#app')
+createApp(App).use(router).use(NativeEventVue, { debugLog: true }).mount('#app')

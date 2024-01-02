@@ -1,5 +1,13 @@
-import { useNativeEvent } from './composables/useNativeEvent'
+import NativeEventVue, { type NativeEventVueOptions, nativeEventVueOptions, resolveEventPropNamePrefix } from './NativeEventVue'
+import { useNativeEvent, type NativeEvent } from './composables/useNativeEvent'
 import { type NativeEventOptions } from './directives/nativeEvent'
-import NativeEventVue, { type NativeEventVueOptions } from './NativeEventVue'
 
-export { useNativeEvent, type NativeEventOptions, NativeEventVue, type NativeEventVueOptions }
+export {
+  NativeEventVue,
+  type NativeEventVueOptions,
+  nativeEventVueOptions,
+  resolveEventPropNamePrefix,
+  useNativeEvent,
+  type NativeEvent,
+  type NativeEventOptions,
+}

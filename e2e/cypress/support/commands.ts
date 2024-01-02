@@ -1,5 +1,4 @@
-import { should } from 'chai'
-import { eventPropNamePrefix } from '../../../lib/directives/nativeEvent'
+import { resolveEventPropNamePrefix } from 'native-event-vue'
 import { spyConsoleLogs } from './e2e'
 
 declare global {
@@ -79,7 +78,7 @@ Cypress.Commands.add('expectEventAttached', { prevSubject: 'element' }, (subject
   return cy.wrap(subject).then(element => {
     const el = element.get(0)
     expect(
-      el[`${eventPropNamePrefix}${eventName}`]?.destroy,
+      el[resolveEventPropNamePrefix(eventName)]?.destroy,
       `Expected element (id: ${el.id}) to have a value for native-event-vue-${eventName} with a destroy function`,
     ).to.be.a('function')
   })
@@ -89,7 +88,7 @@ Cypress.Commands.add('expectEventNotAttached', { prevSubject: 'element' }, (subj
   return cy.wrap(subject).then(element => {
     const el = element.get(0)
     expect(
-      el[`${eventPropNamePrefix}${eventName}`],
+      el[resolveEventPropNamePrefix(eventName)],
       `Expected element (id: ${el.id}) to NOT have a value for native-event-vue-${eventName} with a destroy function`,
     ).to.be.undefined
   })

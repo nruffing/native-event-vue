@@ -30,7 +30,7 @@ export default defineConfig({
   },
   test: {
     env: {
-      NATIVE_EVENT_VUE_DEBUG_LOG: 'true',
+      VITE_DEBUG_NATIVE_EVENT_VUE: 'true',
     },
     browser: {
       enabled: true,

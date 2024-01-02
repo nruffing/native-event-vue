@@ -1,7 +1,7 @@
-describe('v-native-event', () => {
+describe('useNativeEvent', () => {
   it('successfully adds and removes event listener', () => {
-    const inputs = ['input', 'input-with-composable', 'input-replace-existing']
-    cy.visit('/v-native-event')
+    const inputs = ['input']
+    cy.visit('/use-native-event')
 
     for (const inputId of inputs) {
       // Type in the input to ensure the event listener is added

@@ -4,6 +4,8 @@ import { useDebounce, type DebouncedFunction } from './useDebounce'
 import { log } from '../logger'
 import { resolveEventPropNamePrefix } from '../NativeEventVue'
 
+export type NativeEvent = { destroy: () => void } | undefined
+
 export function useNativeEvent(
   domEl: HTMLElement,
   event: string,
@@ -11,7 +13,7 @@ export function useNativeEvent(
   options?: boolean | AddEventListenerOptions,
   debounceMs?: number,
   replaceExisting?: boolean,
-) {
+): NativeEvent {
   const ensure = useEnsure('useNativeEvent')
   ensure.ensureExists(domEl, 'domEl')
   ensure.ensureExists(event, 'event')

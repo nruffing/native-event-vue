@@ -1,7 +1,7 @@
-import { resolveEnvironmentVariable } from './NativeEventVue'
+import { nativeEventVueOptions } from './NativeEventVue'
 
 function shouldLog(): boolean {
-  return resolveEnvironmentVariable('NATIVE_EVENT_VUE_DEBUG_LOG')?.toLocaleLowerCase() === 'true'
+  return nativeEventVueOptions.debugLog === true || import.meta.env['VITE_DEBUG_NATIVE_EVENT_VUE'] === 'true'
 }
 
 export function log(eventName: string, data: any) {

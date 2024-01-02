@@ -30,7 +30,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { useNativeEvent } from '../../../lib/main'
+import { useNativeEvent } from 'native-event-vue'
 
 const inputValue = ref('')
 function listener(event: Event) {

@@ -127,5 +127,8 @@ onBeforeUnmount(() => {
 
 ## Release Notes
 
+### v1.0.1
+  * Publish initial release again with provenance
+
 ### v1.0.0
   * Initial release

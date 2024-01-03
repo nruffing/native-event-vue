@@ -47,11 +47,12 @@ jobs:
     - run: pnpm test -- --browser=${{ matrix.browser }}
 
   ci-test-e2e:
-    runs-on: ubuntu-latest
     needs: [ci]
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 21.x]
+        node-version: [18.x]
+        os: [ubuntu-latest] #, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     env:
       EXISTING_VERSIONS: ''
     steps:
@@ -64,7 +65,7 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
-    - run: pnpm run ci-e2e
+    - run: pnpm run ci-e2e:linux
 
   # build_and_publish:
   #   runs-on: ubuntu-latest

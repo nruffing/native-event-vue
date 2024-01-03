@@ -10,11 +10,19 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm build && vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build && cypress install",
     "open": "cypress open",
     "tests:run": "cypress run",
+    "tests:run:chrome": "cypress run --browser chrome",
+    "tests:run:edge": "cypress run --browser edge",
+    "tests:run:firefox": "cypress run --browser firefox",
+    "tests:run:safari": "cypress run --browser safari",
     "tests:open": "start-server-and-test dev http-get://localhost:9080 open",
-    "test": "start-server-and-test dev http-get://localhost:9080 tests:run"
+    "test": "start-server-and-test dev http-get://localhost:9080 tests:run",
+    "test:chrome": "start-server-and-test dev http-get://localhost:9080 tests:run:chrome",
+    "test:edge": "start-server-and-test dev http-get://localhost:9080 tests:run:edge",
+    "test:firefox": "start-server-and-test dev http-get://localhost:9080 tests:run:firefox",
+    "test:safari": "start-server-and-test dev http-get://localhost:9080 tests:run:safari"
   },
   "engines": {
     "node": ">=18"

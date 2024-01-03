@@ -20,13 +20,16 @@ jobs:
       matrix:
         node-version: [18.x, 20.x, 21.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
-        include:
+        browser: [chrome, firefox, edge, safari]
+        exclude:
           - os: ubuntu-latest
-            browser: [chrome, firefox]
+            browser: edge
+          - os: ubuntu-latest
+            browser: safari
           - os: windows-latest
-            browser: [chrome, firefox, edge]
+            browser: safari
           - os: macos-latest
-            browser: [chrome, firefox, safari]
+            browser: edge
     runs-on: ${{ matrix.os }}
     env:
       EXISTING_VERSIONS: ''

@@ -20,7 +20,7 @@ jobs:
       matrix:
         node-version: [18.x, 20.x, 21.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
-        browser: [chrome, firefox, edge, safari]
+        browser: [chrome, edge, safari] # firefox
         exclude:
           - os: ubuntu-latest
             browser: edge

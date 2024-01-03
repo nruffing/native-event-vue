@@ -17,7 +17,14 @@
   "bugs": {
     "url": "https://github.com/nruffing/native-event-vue/issues"
   },
-  "keywords": [],
+  "keywords": [
+    "html event",
+    "native event",
+    "event",
+    "vuejs",
+    "vue",
+    "vue3"
+  ],
   "packageManager": "pnpm@8.10.5",
   "engines": {
     "node": ">=18"

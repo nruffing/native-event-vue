@@ -124,7 +124,7 @@ describe('useDebounce', () => {
     await executeDebounceTest(calls, debounceMs, DebounceMode.ImmediateAndTimeout, expected)
   })
 
-  test.only('successfully debounces - maximum frequency', async () => {
+  test('successfully debounces - maximum frequency', async () => {
     const debounceMs = 200
 
     const calls = [

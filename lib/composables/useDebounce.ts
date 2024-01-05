@@ -71,8 +71,7 @@ export function useDebounce(
        * If this is the first call, execute immediately
        */
       if (!lastCallTimestamp.value) {
-        lastCallTimestamp.value = Date.now()
-        log('useDebounce | first call', { args, lastCallTimestamp: lastCallTimestamp.value })
+        log('useDebounce | first call', { args })
         lastArgs.value = args
         return execute()
       }
@@ -83,7 +82,7 @@ export function useDebounce(
        */
       const elapsed = Date.now() - lastCallTimestamp.value
       if (!timeoutId.value && elapsed > timeoutMs) {
-        log('useDebounce | subsequent call within timeout', args)
+        log('useDebounce | subsequent call within timeout', { args, elapsed })
         lastArgs.value = args
         return execute()
       }
@@ -98,7 +97,9 @@ export function useDebounce(
     lastArgs.value = args
     if (!timeoutId.value || mode === DebounceMode.Timeout || mode === DebounceMode.ImmediateAndTimeout) {
       window.clearTimeout(timeoutId.value)
-      const timeout = lastCallTimestamp.value ? timeoutMs - (Date.now() - lastCallTimestamp.value) : timeoutMs
+
+      const timeout =
+        mode === DebounceMode.MaximumFrequency && lastCallTimestamp.value ? timeoutMs - (Date.now() - lastCallTimestamp.value) : timeoutMs
 
       timeoutId.value = window.setTimeout(() => {
         execute()
@@ -124,8 +125,9 @@ export function useDebounce(
 
   debounced.destroy = () => {
     log('useDebounce | destroy', {})
-    lastCallTimestamp.value = undefined
+    window.clearTimeout(timeoutId.value)
     clear()
+    lastCallTimestamp.value = undefined
     isDestroyed.value = true
   }
 

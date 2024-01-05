@@ -84,6 +84,8 @@ async function executeDebounceTest(
     //expectTimestampCloseEnough(actualCall.timestamp, expectedCall.timestampOffset + timestampStart)
     expect(actualCall.args).toEqual(expectedCall.args)
   }
+
+  debounced!.destroy()
 }
 
 describe('useDebounce', () => {
@@ -107,14 +109,14 @@ describe('useDebounce', () => {
   })
 
   test('successfully debounces - immediate and timeout mode', async () => {
-    const debounceMs = 100
+    const debounceMs = 200
 
     const calls = [
       { delay: 0, arg1: 'a', arg2: 1 },
-      { delay: 150, arg1: 'a1', arg2: 11 },
+      { delay: 220, arg1: 'a1', arg2: 11 },
       { delay: 10, arg1: 'a', arg2: 1 },
-      { delay: 50, arg1: 'b', arg2: 2 },
-      { delay: 110, arg1: 'c', arg2: 3 },
+      { delay: 10, arg1: 'b', arg2: 2 },
+      { delay: 220, arg1: 'c', arg2: 3 },
     ] as DebounceTestCall[]
 
     const expected = [{ args: ['a', 1] }, { args: ['a1', 11] }, { args: ['b', 2] }, { args: ['c', 3] }] as DebounceTestExpectedCall[]
@@ -123,15 +125,15 @@ describe('useDebounce', () => {
   })
 
   test('successfully debounces - maximum frequency', async () => {
-    const debounceMs = 100
+    const debounceMs = 200
 
     const calls = [
       { delay: 0, arg1: 'a', arg2: 1 },
-      { delay: 80, arg1: 'a1', arg2: 11 },
-      { delay: 60, arg1: 'a', arg2: 1 },
-      { delay: 10, arg1: 'a', arg2: 1 },
-      { delay: 20, arg1: 'b', arg2: 2 },
-      { delay: 110, arg1: 'c', arg2: 3 },
+      { delay: 160, arg1: 'a1', arg2: 11 },
+      { delay: 120, arg1: 'a', arg2: 1 },
+      { delay: 20, arg1: 'a', arg2: 1 },
+      { delay: 40, arg1: 'b', arg2: 2 },
+      { delay: 220, arg1: 'c', arg2: 3 },
     ] as DebounceTestCall[]
 
     const expected = [{ args: ['a', 1] }, { args: ['a1', 11] }, { args: ['b', 2] }, { args: ['c', 3] }] as DebounceTestExpectedCall[]

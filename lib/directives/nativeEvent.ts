@@ -2,12 +2,14 @@ import type { DirectiveBinding, VNode } from 'vue'
 import { log } from '../logger'
 import { useNativeEvent } from '../composables/useNativeEvent'
 import { resolveEventPropNamePrefix } from '../NativeEventVue'
+import type { DebounceMode } from '../composables/useDebounce'
 
 export interface NativeEventOptions {
   event: string
   listener: EventListenerOrEventListenerObject
   options?: boolean | AddEventListenerOptions
   debounceMs?: number
+  debounceMode?: DebounceMode
   disabled?: boolean | null | undefined
 }
 
@@ -49,7 +51,15 @@ export const nativeEventDirective = {
 }
 
 function addEventListener(domEl: HTMLElement, binding: DirectiveBinding<NativeEventOptions>, replaceExisting: boolean) {
-  useNativeEvent(domEl, binding.value.event, binding.value.listener, binding.value.options, binding.value.debounceMs, replaceExisting)
+  useNativeEvent(
+    domEl,
+    binding.value.event,
+    binding.value.listener,
+    binding.value.options,
+    binding.value.debounceMs,
+    binding.value.debounceMode,
+    replaceExisting,
+  )
   //log('native-event | event listener added', { domEl, binding: binding.value, replaceExisting })
 }
 

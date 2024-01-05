@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { useEnsure } from './useEnsure'
-import { useDebounce, type DebouncedFunction } from './useDebounce'
+import { useDebounce, type DebouncedFunction, DebounceMode } from './useDebounce'
 import { log } from '../logger'
 import { resolveEventPropNamePrefix } from '../NativeEventVue'
 
@@ -12,6 +12,7 @@ export function useNativeEvent(
   listener: EventListenerOrEventListenerObject,
   options?: boolean | AddEventListenerOptions,
   debounceMs?: number,
+  debounceMode?: DebounceMode,
   replaceExisting?: boolean,
 ): NativeEvent {
   const ensure = useEnsure('useNativeEvent')
@@ -23,11 +24,15 @@ export function useNativeEvent(
     ensure.ensureNotNegative(debounceMs, 'debounceMs')
   }
 
+  if (debounceMode) {
+    ensure.ensureValidEnumValue(debounceMode, DebounceMode, 'debounceMode')
+  }
+
   const eventPropNamePrefix = resolveEventPropNamePrefix(event)
   const existing = domEl[eventPropNamePrefix]
   if (existing) {
     if (replaceExisting) {
-      log('useNativeEvent | replacing existing listener', { domEl, event, options, debounceMs, replaceExisting })
+      log('useNativeEvent | replacing existing listener', { domEl, event, options, debounceMs, debounceMode, replaceExisting })
       existing.destroy()
     } else {
       return
@@ -42,13 +47,13 @@ export function useNativeEvent(
     }
     domEl[eventPropNamePrefix] = undefined
     domEl.removeEventListener(event, listenerRef.value, options)
-    log('useNativeEvent | event listener removed', { domEl, event, options, debounceMs, replaceExisting })
+    log('useNativeEvent | event listener removed', { domEl, event, options, debounceMs, debounceMode, replaceExisting })
   }
 
   if (debounceMs) {
-    const debounced = useDebounce(listener, debounceMs)
+    const debounced = useDebounce(listener, debounceMs, debounceMode)
     listenerRef.value = debounced
-    log('useNativeEvent | event listener debounced', { domEl, event, options, debounceMs, replaceExisting })
+    log('useNativeEvent | event listener debounced', { domEl, event, options, debounceMs, debounceMode, replaceExisting })
   }
 
   domEl.addEventListener(event, listenerRef.value, options)
@@ -56,7 +61,7 @@ export function useNativeEvent(
   const result = { destroy: removeListener }
   domEl[eventPropNamePrefix] = result
 
-  log('useNativeEvent | event listener added', { domEl, event, options, debounceMs, replaceExisting })
+  log('useNativeEvent | event listener added', { domEl, event, options, debounceMs, debounceMode, replaceExisting })
 
   return result
 }

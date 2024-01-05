@@ -1,5 +1,6 @@
 import NativeEventVue, { type NativeEventVueOptions, nativeEventVueOptions, resolveEventPropNamePrefix } from './NativeEventVue'
 import { useNativeEvent, type NativeEvent } from './composables/useNativeEvent'
+import { DebounceMode } from './composables/useDebounce'
 import { type NativeEventOptions } from './directives/nativeEvent'
 
 export {
@@ -10,4 +11,5 @@ export {
   useNativeEvent,
   type NativeEvent,
   type NativeEventOptions,
+  DebounceMode,
 }

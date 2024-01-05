@@ -1,7 +1,8 @@
 import { expect, test, describe } from 'vitest'
 // import { expectTimestampCloseEnough } from '../../test-util/timestampUtil'
-import { useDebounce } from './useDebounce'
+import { useDebounce, DebounceMode } from './useDebounce'
 import { log } from '../logger'
+import { nativeEventVueOptions } from '../NativeEventVue'
 
 interface DebounceTestCall {
   delay: number
@@ -23,7 +24,12 @@ interface DebounceTestExpectedCall {
   args: any[]
 }
 
-async function executeDebounceTest(calls: DebounceTestCall[], debounceMs: number, expected: DebounceTestExpectedCall[]): Promise<void> {
+async function executeDebounceTest(
+  calls: DebounceTestCall[],
+  debounceMs: number,
+  debounceMode: DebounceMode,
+  expected: DebounceTestExpectedCall[],
+): Promise<void> {
   const actualCalls = [] as DebounceTestActualCall[]
 
   const debounceTestFunction = (arg1: string, arg2: number) => {
@@ -32,7 +38,7 @@ async function executeDebounceTest(calls: DebounceTestCall[], debounceMs: number
     actualCalls.push(call)
   }
 
-  const debounced = useDebounce(debounceTestFunction, debounceMs)
+  const debounced = useDebounce(debounceTestFunction, debounceMs, debounceMode)
 
   const callNext = () => {
     if (!calls.length) {
@@ -81,7 +87,9 @@ async function executeDebounceTest(calls: DebounceTestCall[], debounceMs: number
 }
 
 describe('useDebounce', () => {
-  test('successfully debounces', async () => {
+  nativeEventVueOptions.debugLog = true
+
+  test('successfully debounces - timeout mode', async () => {
     const debounceMs = 100
 
     const calls = [
@@ -95,7 +103,42 @@ describe('useDebounce', () => {
 
     const expected = [{ args: ['b', 2] }, { args: ['c', 3] }] as DebounceTestExpectedCall[]
 
-    await executeDebounceTest(calls, debounceMs, expected)
+    await executeDebounceTest(calls, debounceMs, DebounceMode.Timeout, expected)
+  })
+
+  test('successfully debounces - immediate and timeout mode', async () => {
+    const debounceMs = 100
+
+    const calls = [
+      { delay: 0, arg1: 'a', arg2: 1 },
+      { delay: 110, arg1: 'a1', arg2: 11 },
+      { delay: 10, arg1: 'a', arg2: 1 },
+      { delay: 10, arg1: 'a', arg2: 1 },
+      { delay: 10, arg1: 'a', arg2: 1 },
+      { delay: 50, arg1: 'b', arg2: 2 },
+      { delay: 110, arg1: 'c', arg2: 3 },
+    ] as DebounceTestCall[]
+
+    const expected = [{ args: ['a', 1] }, { args: ['a1', 11] }, { args: ['b', 2] }, { args: ['c', 3] }] as DebounceTestExpectedCall[]
+
+    await executeDebounceTest(calls, debounceMs, DebounceMode.ImmediateAndTimeout, expected)
+  })
+
+  test('successfully debounces - minimum period', async () => {
+    const debounceMs = 100
+
+    const calls = [
+      { delay: 0, arg1: 'a', arg2: 1 },
+      { delay: 80, arg1: 'a1', arg2: 11 },
+      { delay: 25, arg1: 'a', arg2: 1 },
+      { delay: 10, arg1: 'a', arg2: 1 },
+      { delay: 50, arg1: 'b', arg2: 2 },
+      { delay: 110, arg1: 'c', arg2: 3 },
+    ] as DebounceTestCall[]
+
+    const expected = [{ args: ['a', 1] }, { args: ['a1', 11] }, { args: ['b', 2] }, { args: ['c', 3] }] as DebounceTestExpectedCall[]
+
+    await executeDebounceTest(calls, debounceMs, DebounceMode.MaximumFrequency, expected)
   })
 
   test(`clear successfully clears`, async () => {
@@ -111,7 +154,7 @@ describe('useDebounce', () => {
 
     const expected = [] as DebounceTestExpectedCall[]
 
-    await executeDebounceTest(calls, debounceMs, expected)
+    await executeDebounceTest(calls, debounceMs, DebounceMode.Timeout, expected)
   })
 
   test(`clear successfully clears but doesn't destroy`, async () => {
@@ -127,7 +170,7 @@ describe('useDebounce', () => {
 
     const expected = [{ args: ['c', 3] }] as DebounceTestExpectedCall[]
 
-    await executeDebounceTest(calls, debounceMs, expected)
+    await executeDebounceTest(calls, debounceMs, DebounceMode.Timeout, expected)
   })
 
   test(`destroy successfully clears and destroys`, async () => {
@@ -143,7 +186,7 @@ describe('useDebounce', () => {
 
     const expected = [] as DebounceTestExpectedCall[]
 
-    await executeDebounceTest(calls, debounceMs, expected)
+    await executeDebounceTest(calls, debounceMs, DebounceMode.Timeout, expected)
   })
 
   test(`flush successfully flushes. clears, and does not destroy`, async () => {
@@ -159,7 +202,7 @@ describe('useDebounce', () => {
 
     const expected = [{ args: ['b', 2] }, { args: ['c', 3] }] as DebounceTestExpectedCall[]
 
-    await executeDebounceTest(calls, debounceMs, expected)
+    await executeDebounceTest(calls, debounceMs, DebounceMode.Timeout, expected)
   })
 
   test('throws when func is not provided', () => {
@@ -174,5 +217,9 @@ describe('useDebounce', () => {
 
   test('throws when timeoutMs is negative', () => {
     expect(() => useDebounce(() => {}, -1)).toThrow()
+  })
+
+  test('throws when debounce mode is invalid', () => {
+    expect(() => useDebounce(() => {}, 1, 'some invalid mode' as DebounceMode)).toThrow()
   })
 })

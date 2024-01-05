@@ -11,11 +11,35 @@ export type DebouncedFunction = {
   destroy(): void
 }
 
-export function useDebounce(func: FunctionToDebounce | EventListenerObject, timeoutMs: number): DebouncedFunction {
+export enum DebounceMode {
+  /**
+   * Debounce using a timeout only. The function will not be called until it has not been called for the specified timeout.
+   */
+  Timeout = 'timeout',
+  /**
+   * Debounce using a timeout and immediate execution. The function will be called immediately and then not again until it has not been called for the specified timeout.
+   */
+  ImmediateAndTimeout = 'immediate-and-timeout',
+  /**
+   * Debounce using a maximum frequency. The function will be called immediately and then at most once every timeout. Debounced calls will always use the latest arguments.
+   * The debounce function will be called even if its been called within the timeout.
+   */
+  MaximumFrequency = 'maximum-frequency',
+}
+
+export function useDebounce(
+  func: FunctionToDebounce | EventListenerObject,
+  timeoutMs: number,
+  mode: DebounceMode = DebounceMode.Timeout,
+): DebouncedFunction {
   const ensure = useEnsure('useDebounce')
   ensure.ensureExists(func, 'func')
   ensure.ensureNotNegative(timeoutMs, 'timeoutMs')
+  ensure.ensureValidEnumValue(mode, DebounceMode, 'mode')
 
+  const immediate = mode === DebounceMode.ImmediateAndTimeout || mode === DebounceMode.MaximumFrequency
+
+  const lastCallTimestamp = ref<number | undefined>(undefined)
   const timeoutId = ref<number | undefined>(undefined)
   const lastArgs = ref<any[] | undefined>(undefined)
   const isDestroyed = ref(false)
@@ -27,6 +51,7 @@ export function useDebounce(func: FunctionToDebounce | EventListenerObject, time
       } else {
         func(...lastArgs.value)
       }
+      lastCallTimestamp.value = Date.now()
       clear()
     }
   }
@@ -41,17 +66,54 @@ export function useDebounce(func: FunctionToDebounce | EventListenerObject, time
       return
     }
 
-    lastArgs.value = args
-    window.clearTimeout(timeoutId.value)
+    if (immediate) {
+      /**
+       * If this is the first call, execute immediately
+       */
+      if (!lastCallTimestamp.value) {
+        lastCallTimestamp.value = Date.now()
+        log('useDebounce | first call', { args, lastCallTimestamp: lastCallTimestamp.value })
+        lastArgs.value = args
+        return execute()
+      }
 
-    timeoutId.value = window.setTimeout(() => {
-      log('useDebounce | timeout reached', lastArgs.value)
-      execute()
-    }, timeoutMs)
+      /**
+       * If this is a subsequent call, check if the timeout has been reached
+       * and there are no pending calls
+       */
+      const elapsed = Date.now() - lastCallTimestamp.value
+      if (!timeoutId.value && elapsed > timeoutMs) {
+        log('useDebounce | subsequent call within timeout', args)
+        lastArgs.value = args
+        return execute()
+      }
+    }
+
+    /**
+     * If this is a subsequent call within the timeout or immediate execution is not
+     * enabled, reset the timeout.
+     * If maximum frequency mode is enabled we only want to update to the latest arguments
+     * but not reset the timer.
+     */
+    lastArgs.value = args
+    if (!timeoutId.value || mode === DebounceMode.Timeout || mode === DebounceMode.ImmediateAndTimeout) {
+      window.clearTimeout(timeoutId.value)
+      const timeout = lastCallTimestamp.value ? timeoutMs - (Date.now() - lastCallTimestamp.value) : timeoutMs
+
+      timeoutId.value = window.setTimeout(() => {
+        execute()
+        log('useDebounce | timeout reached', { args: lastArgs.value, lastCallTimestamp: lastCallTimestamp.value })
+      }, timeout)
+
+      log('useDebounce | timeout reset', { args: lastArgs.value, lastCallTimestamp: lastCallTimestamp.value, timeout })
+    } else {
+      log('useDebounce | maximum frequency mode skip', { args: lastArgs.value, lastCallTimestamp: lastCallTimestamp.value })
+    }
   }
 
   debounced.clear = () => {
     log('useDebounce | clear', {})
+    lastCallTimestamp.value = undefined
     clear()
   }
 
@@ -62,6 +124,7 @@ export function useDebounce(func: FunctionToDebounce | EventListenerObject, time
 
   debounced.destroy = () => {
     log('useDebounce | destroy', {})
+    lastCallTimestamp.value = undefined
     clear()
     isDestroyed.value = true
   }

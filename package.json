@@ -1,6 +1,6 @@
 {
   "name": "native-event-vue",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "type": "module",
   "private": false,
   "description": "Directives and composables for wiring up and debouncing native HTML events in Vue.",

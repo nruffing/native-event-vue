@@ -91,6 +91,7 @@ function listener(event: Event) {
 | `listener` | `EventListenerOrEventListenerObject` | The event handler function to attach. This is the same type as the browser API [`addEventListener.listener` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback). |
 | `options` | `boolean`, `AddEventListenerOptions` or `undefined` | Optional. This is the same type as the browser API [`addEventListener.options` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options). |
 | `debounceMs` | `number` or `undefined` | Optionally specify a debounce timeout. |
+| `debounceMode` | [`DebounceMode`](#debounce-mode) | Specify the type of desired debounce behavior. Defaults to `Timeout`. |
 | `disabled` | `boolean` or `undefined` | Optionally disable/remove the event handler. |
 
 ### Composable
@@ -123,9 +124,23 @@ onBeforeUnmount(() => {
 | `listener` | `EventListenerOrEventListenerObject` | The event handler function to attach. This is the same type as the browser API [`addEventListener.listener` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback). |
 | `options` | `boolean`, `AddEventListenerOptions` or `undefined` | Optional. This is the same type as the browser API [`addEventListener.options` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options). |
 | `debounceMs` | `number` or `undefined` | Optionally specify a debounce timeout. |
+| `debounceMode` | [`DebounceMode`](#debounce-mode) | Specify the type of desired debounce behavior. Defaults to `Timeout`. |
 | `replaceExisting` | `boolean` or `undefined` | Optionally specify to replace any existing event handler that was attached using `native-event-vue`. Otherwise the new event listener will not be attached. |
 
+### Debounce Mode
+
+The following debounce behavior modes are available via the `DebounceMode` enum. By default the `Timeout` mode is used.
+
+| Mode | Description |
+| --- | --- |
+| `Timeout` | Debounce using a timeout only. The function will not be called until it has not been called for the specified timeout. |
+| `ImmediateAndTimeout` | Debounce using a timeout and immediate execution. The function will be called immediately and then not again until it has not been called for the specified timeout. |
+| `MaximumFrequency` |  Debounce using a maximum frequency. The function will be called immediately and then at most once every timeout. Debounced calls will always use the latest arguments. The debounce function will be called even if its been called within the timeout. |
+
 ## Release Notes
+
+### v1.1.0
+  * Add `ImmediateAndTimeout` and `MaximumFrequency` debounce modes. The default mode is now called `Timeout` and acts just as the debounce did previously.
 
 ### v1.0.1
   * Publish initial release again with provenance

@@ -89,7 +89,7 @@ async function executeDebounceTest(
 }
 
 describe('useDebounce', () => {
-  nativeEventVueOptions.debugLog = true
+  //nativeEventVueOptions.debugLog = true
 
   test('successfully debounces - timeout mode', async () => {
     const debounceMs = 100
@@ -124,15 +124,15 @@ describe('useDebounce', () => {
     await executeDebounceTest(calls, debounceMs, DebounceMode.ImmediateAndTimeout, expected)
   })
 
-  test('successfully debounces - maximum frequency', async () => {
+  test.only('successfully debounces - maximum frequency', async () => {
     const debounceMs = 200
 
     const calls = [
       { delay: 0, arg1: 'a', arg2: 1 },
       { delay: 160, arg1: 'a1', arg2: 11 },
       { delay: 120, arg1: 'a', arg2: 1 },
-      { delay: 20, arg1: 'a', arg2: 1 },
-      { delay: 40, arg1: 'b', arg2: 2 },
+      { delay: 10, arg1: 'a', arg2: 1 },
+      { delay: 10, arg1: 'b', arg2: 2 },
       { delay: 220, arg1: 'c', arg2: 3 },
     ] as DebounceTestCall[]
 

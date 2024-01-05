@@ -111,7 +111,7 @@ describe('useDebounce', () => {
 
     const calls = [
       { delay: 0, arg1: 'a', arg2: 1 },
-      { delay: 110, arg1: 'a1', arg2: 11 },
+      { delay: 150, arg1: 'a1', arg2: 11 },
       { delay: 10, arg1: 'a', arg2: 1 },
       { delay: 10, arg1: 'a', arg2: 1 },
       { delay: 10, arg1: 'a', arg2: 1 },
@@ -124,15 +124,15 @@ describe('useDebounce', () => {
     await executeDebounceTest(calls, debounceMs, DebounceMode.ImmediateAndTimeout, expected)
   })
 
-  test('successfully debounces - minimum period', async () => {
+  test('successfully debounces - maximum frequency', async () => {
     const debounceMs = 100
 
     const calls = [
       { delay: 0, arg1: 'a', arg2: 1 },
       { delay: 80, arg1: 'a1', arg2: 11 },
-      { delay: 25, arg1: 'a', arg2: 1 },
+      { delay: 60, arg1: 'a', arg2: 1 },
       { delay: 10, arg1: 'a', arg2: 1 },
-      { delay: 50, arg1: 'b', arg2: 2 },
+      { delay: 20, arg1: 'b', arg2: 2 },
       { delay: 110, arg1: 'c', arg2: 3 },
     ] as DebounceTestCall[]
 

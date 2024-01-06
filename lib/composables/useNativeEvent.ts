@@ -8,7 +8,7 @@ export type NativeEvent = { destroy: () => void } | undefined
 
 /**
  * Composable to attach an HTML native event to an element.
- * @param domEl The DOM element to attach the event listener to.
+ * @param domEl The DOM element or window to attach the event listener to.
  * @param event The name of the native event (e.g. `resize`).
  * @param listener The event handler function to attach. This is the same type as the browser
  * API [`addEventListener.listener` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback).
@@ -19,7 +19,7 @@ export type NativeEvent = { destroy: () => void } | undefined
  * @returns {@link NativeEvent} object with a destroy method to remove the event listener.
  */
 export function useNativeEvent(
-  domEl: HTMLElement,
+  domEl: HTMLElement | (Window & typeof globalThis),
   event: string,
   listener: EventListenerOrEventListenerObject,
   options?: boolean | AddEventListenerOptions,

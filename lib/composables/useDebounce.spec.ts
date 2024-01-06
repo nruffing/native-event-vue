@@ -2,7 +2,6 @@ import { expect, test, describe } from 'vitest'
 // import { expectTimestampCloseEnough } from '../../test-util/timestampUtil'
 import { useDebounce, DebounceMode } from './useDebounce'
 import { log } from '../logger'
-import { nativeEventVueOptions } from '../NativeEventVue'
 
 interface DebounceTestCall {
   delay: number

@@ -128,7 +128,7 @@ onBeforeUnmount(() => {
 
 | Property | Type | Description |
 | --- | --- | --- |
-| `domEl` | `HTMLElement` | The DOM element to attach the event listener to. |
+| `domEl` | `HTMLElement` or `Window & typeof globalThis` | The DOM element or window to attach the event listener to. |
 | `event` | `string` | The name of the native event (e.g. `resize`). |
 | `listener` | `EventListenerOrEventListenerObject` | The event handler function to attach. This is the same type as the browser API [`addEventListener.listener` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback). |
 | `options` | `boolean`, `AddEventListenerOptions` or `undefined` | Optional. This is the same type as the browser API [`addEventListener.options` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options). |
@@ -147,6 +147,9 @@ The following debounce behavior modes are available via the `DebounceMode` enum.
 | `MaximumFrequency` |  Debounce using a maximum frequency. The function will be called immediately and then at most once every timeout. Debounced calls will always use the latest arguments. The debounce function will be called even if its been called within the timeout. |
 
 ## Release Notes
+
+### v1.3.0
+  * Add TS support for attaching events to the window object when using `useNativeEvent`.
 
 ### v1.2.0
   * Add debug logging level

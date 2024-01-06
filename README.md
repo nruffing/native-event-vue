@@ -25,7 +25,7 @@ npm i native-event-vue
 ```ts
 import { createApp } from 'vue'
 import App from './App.vue'
-import { NativeEventVue } from 'dragon-drop-vue'
+import { NativeEventVue } from 'native-event-vue'
 
 createApp(App).use(NativeEventVue)
 ```
@@ -35,10 +35,10 @@ createApp(App).use(NativeEventVue)
 ```ts
 import { createApp } from 'vue'
 import App from './App.vue'
-import { NativeEventVue, type NativeEventVueOptions } from 'dragon-drop-vue'
+import { NativeEventVue, type NativeEventVueOptions } from 'native-event-vue'
 
 const options = {
-  debugLog: true,
+  debugLogLevel: DebugLogLevel.Info,
 } as NativeEventVueOptions
 
 createApp(App).use(NativeEventVue, options)

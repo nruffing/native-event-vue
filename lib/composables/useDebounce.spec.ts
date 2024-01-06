@@ -124,15 +124,15 @@ describe('useDebounce', () => {
   })
 
   test('successfully debounces - maximum frequency', async () => {
-    const debounceMs = 200
+    const debounceMs = 400
 
     const calls = [
       { delay: 0, arg1: 'a', arg2: 1 },
-      { delay: 160, arg1: 'a1', arg2: 11 },
-      { delay: 120, arg1: 'a', arg2: 1 },
-      { delay: 10, arg1: 'a', arg2: 1 },
-      { delay: 10, arg1: 'b', arg2: 2 },
-      { delay: 220, arg1: 'c', arg2: 3 },
+      { delay: 320, arg1: 'a1', arg2: 11 },
+      { delay: 240, arg1: 'a', arg2: 1 },
+      { delay: 20, arg1: 'a', arg2: 1 },
+      { delay: 20, arg1: 'b', arg2: 2 },
+      { delay: 440, arg1: 'c', arg2: 3 },
     ] as DebounceTestCall[]
 
     const expected = [{ args: ['a', 1] }, { args: ['a1', 11] }, { args: ['b', 2] }, { args: ['c', 3] }] as DebounceTestExpectedCall[]

@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { log } from '../logger'
 import { useEnsure } from './useEnsure'
+import { DebugLogLevel } from '../NativeEventVue'
 
 export type FunctionToDebounce = (...args: any[]) => unknown
 
@@ -71,7 +72,7 @@ export function useDebounce(
        * If this is the first call, execute immediately
        */
       if (!lastCallTimestamp.value) {
-        log('useDebounce | first call', { args })
+        log('useDebounce | first call', { args }, DebugLogLevel.Verbose)
         lastArgs.value = args
         return execute()
       }
@@ -82,7 +83,7 @@ export function useDebounce(
        */
       const elapsed = Date.now() - lastCallTimestamp.value
       if (!timeoutId.value && elapsed > timeoutMs) {
-        log('useDebounce | subsequent call within timeout', { args, elapsed })
+        log('useDebounce | subsequent call within timeout', { args, elapsed }, DebugLogLevel.Verbose)
         lastArgs.value = args
         return execute()
       }
@@ -103,12 +104,12 @@ export function useDebounce(
 
       timeoutId.value = window.setTimeout(() => {
         execute()
-        log('useDebounce | timeout reached', { args: lastArgs.value, lastCallTimestamp: lastCallTimestamp.value })
+        log('useDebounce | timeout reached', { args: lastArgs.value, lastCallTimestamp: lastCallTimestamp.value }, DebugLogLevel.Verbose)
       }, timeout)
 
-      log('useDebounce | timeout reset', { args: lastArgs.value, lastCallTimestamp: lastCallTimestamp.value, timeout })
+      log('useDebounce | timeout reset', { args: lastArgs.value, lastCallTimestamp: lastCallTimestamp.value, timeout }, DebugLogLevel.Verbose)
     } else {
-      log('useDebounce | maximum frequency mode skip', { args: lastArgs.value, lastCallTimestamp: lastCallTimestamp.value })
+      log('useDebounce | maximum frequency mode skip', { args: lastArgs.value, lastCallTimestamp: lastCallTimestamp.value }, DebugLogLevel.Verbose)
     }
   }
 

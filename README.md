@@ -46,9 +46,18 @@ createApp(App).use(NativeEventVue, options)
 
 | Property | Type | Description |
 | --- | --- | --- |
-| `debugLog` | `boolean` or `undefined` | Print additional debugging information to the console. |
+| `debugLog` | [`DebugLogLevel`](#debug-log-level) or `undefined` | Print additional debugging information to the console. By default a log level of `Error` is used. |
 | `nativeEventDirectiveName` | `string` or `undefined` | Optionally specify what to register for the native-event directive. By default this is `native-event` and the directive would be `v-native-event`. |
 | `propNamePrefix` | `string` or `undefined` | When an event is attached using this library a reference to the the libraries event instance is stored on the attached element using a property prefixed with this value and ending in the event name. This defaults to `native-event-vue-`. |
+
+#### Debug Log Level
+
+| Level | Description |
+| --- | --- |
+| `Error` | Only errors are logged. |
+| `Info` | Additional debugging information is logged when events are attached and detached. |
+| `Verbose` | All additional debugging information is logged including when directive hooks fire and is certain situations in the debouncing logic. |
+
 
 ## Usage
 
@@ -138,6 +147,10 @@ The following debounce behavior modes are available via the `DebounceMode` enum.
 | `MaximumFrequency` |  Debounce using a maximum frequency. The function will be called immediately and then at most once every timeout. Debounced calls will always use the latest arguments. The debounce function will be called even if its been called within the timeout. |
 
 ## Release Notes
+
+### v1.2.0
+  * Add debug logging level
+  * Additional source documentation
 
 ### v1.1.0
   * Add `ImmediateAndTimeout` and `MaximumFrequency` debounce modes. The default mode is now called `Timeout` and acts just as the debounce did previously.

@@ -6,6 +6,18 @@ import { resolveEventPropNamePrefix } from '../NativeEventVue'
 
 export type NativeEvent = { destroy: () => void } | undefined
 
+/**
+ * Composable to attach an HTML native event to an element.
+ * @param domEl The DOM element to attach the event listener to.
+ * @param event The name of the native event (e.g. `resize`).
+ * @param listener The event handler function to attach. This is the same type as the browser
+ * API [`addEventListener.listener` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback).
+ * @param options Optional. This is the same type as the browser API [`addEventListener.options` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options).
+ * @param debounceMs Optionally specify a debounce timeout.
+ * @param debounceMode Specify the type of desired debounce behavior. Defaults to `Timeout`.
+ * @param replaceExisting Optionally specify to replace any existing event handler that was attached using `native-event-vue`. Otherwise the new event listener will not be attached.
+ * @returns {@link NativeEvent} object with a destroy method to remove the event listener.
+ */
 export function useNativeEvent(
   domEl: HTMLElement,
   event: string,

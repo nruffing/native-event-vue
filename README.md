@@ -101,6 +101,7 @@ function listener(event: Event) {
 | `options` | `boolean`, `AddEventListenerOptions` or `undefined` | Optional. This is the same type as the browser API [`addEventListener.options` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#options). |
 | `debounceMs` | `number` or `undefined` | Optionally specify a debounce timeout. |
 | `debounceMode` | [`DebounceMode`](#debounce-mode) | Specify the type of desired debounce behavior. Defaults to `Timeout`. |
+| `preventDefaultAllDebouncedEvents` | `boolean` or `undefined` | Optionally specify to call `preventDefault` on all events including ones that are debounced. For example. to ensure that the drop event always fires as expected, you should always include a `preventDefault` call in the part of your code which handles the dragover event. |
 | `disabled` | `boolean` or `undefined` | Optionally disable/remove the event handler. |
 
 ### Composable
@@ -135,6 +136,7 @@ onBeforeUnmount(() => {
 | `debounceMs` | `number` or `undefined` | Optionally specify a debounce timeout. |
 | `debounceMode` | [`DebounceMode`](#debounce-mode) | Specify the type of desired debounce behavior. Defaults to `Timeout`. |
 | `replaceExisting` | `boolean` or `undefined` | Optionally specify to replace any existing event handler that was attached using `native-event-vue`. Otherwise the new event listener will not be attached. |
+| `preventDefaultAllDebouncedEvents` | `boolean` or `undefined` | Optionally specify to call `preventDefault` on all events including ones that are debounced. For example. to ensure that the drop event always fires as expected, you should always include a `preventDefault` call in the part of your code which handles the dragover event. |
 
 ### Debounce Mode
 
@@ -147,6 +149,9 @@ The following debounce behavior modes are available via the `DebounceMode` enum.
 | `MaximumFrequency` |  Debounce using a maximum frequency. The function will be called immediately and then at most once every timeout. Debounced calls will always use the latest arguments. The debounce function will be called even if its been called within the timeout. |
 
 ## Release Notes
+
+### v1.4.0
+  * Add option to call `preventDefault` on all events including ones that are debounced. For example. to ensure that the drop event always fires as expected, you should always include a `preventDefault` call in the part of your code which handles the dragover event. |
 
 ### v1.3.0
   * Add TS support for attaching events to the window object when using `useNativeEvent`.

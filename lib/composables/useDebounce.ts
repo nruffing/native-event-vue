@@ -32,6 +32,7 @@ export function useDebounce(
   func: FunctionToDebounce | EventListenerObject,
   timeoutMs: number,
   mode: DebounceMode = DebounceMode.Timeout,
+  preventDefaultAllEvents?: boolean,
 ): DebouncedFunction {
   const ensure = useEnsure('useDebounce')
   ensure.ensureExists(func, 'func')
@@ -65,6 +66,15 @@ export function useDebounce(
   const debounced = (...args: any[]) => {
     if (isDestroyed.value) {
       return
+    }
+
+    /**
+     * For example, to ensure that the drop event always fires as expected, you should always include a preventDefault() call in the part of your
+     * code which handles the dragover event.
+     * https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/drop_event
+     */
+    if (preventDefaultAllEvents && args?.length > 0 && args[0] instanceof Event) {
+      args[0].preventDefault()
     }
 
     if (immediate) {

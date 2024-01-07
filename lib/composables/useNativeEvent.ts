@@ -16,6 +16,8 @@ export type NativeEvent = { destroy: () => void } | undefined
  * @param debounceMs Optionally specify a debounce timeout.
  * @param debounceMode Specify the type of desired debounce behavior. Defaults to `Timeout`.
  * @param replaceExisting Optionally specify to replace any existing event handler that was attached using `native-event-vue`. Otherwise the new event listener will not be attached.
+ * @param preventDefaultAllDebouncedEvents Optionally specify to call `preventDefault` on all events including ones that are debounced. For example. to ensure that the drop event always fires as
+ * expected, you should always include a `preventDefault` call in the part of your code which handles the dragover event.
  * @returns {@link NativeEvent} object with a destroy method to remove the event listener.
  */
 export function useNativeEvent(
@@ -26,6 +28,7 @@ export function useNativeEvent(
   debounceMs?: number,
   debounceMode?: DebounceMode,
   replaceExisting?: boolean,
+  preventDefaultAllDebouncedEvents?: boolean,
 ): NativeEvent {
   const ensure = useEnsure('useNativeEvent')
   ensure.ensureExists(domEl, 'domEl')
@@ -63,7 +66,7 @@ export function useNativeEvent(
   }
 
   if (debounceMs) {
-    const debounced = useDebounce(listener, debounceMs, debounceMode)
+    const debounced = useDebounce(listener, debounceMs, debounceMode, preventDefaultAllDebouncedEvents)
     listenerRef.value = debounced
     log('useNativeEvent | event listener debounced', { domEl, event, options, debounceMs, debounceMode, replaceExisting })
   }

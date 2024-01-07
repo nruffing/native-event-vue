@@ -27,6 +27,11 @@ export interface NativeEventOptions {
    */
   debounceMode?: DebounceMode
   /**
+   * Optionally specify to call `preventDefault` on all events including ones that are debounced. For example. to ensure that the drop event always fires as
+   * expected, you should always include a `preventDefault` call in the part of your code which handles the dragover event.
+   */
+  preventDefaultAllDebouncedEvents?: boolean | undefined
+  /**
    * Optionally disable/remove the event handler.
    */
   disabled?: boolean | null | undefined
@@ -78,6 +83,7 @@ function addEventListener(domEl: HTMLElement, binding: DirectiveBinding<NativeEv
     binding.value.debounceMs,
     binding.value.debounceMode,
     replaceExisting,
+    binding.value.preventDefaultAllDebouncedEvents ?? false,
   )
   //log('native-event | event listener added', { domEl, binding: binding.value, replaceExisting })
 }

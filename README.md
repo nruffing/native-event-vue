@@ -14,6 +14,15 @@ Directives and composables for wiring up and debouncing native HTML events in Vu
   </a>
 </p>
 
+## Examples
+
+* [dragon-drop-vue](https://dragondropvue.com)
+  * [setup](https://github.com/nruffing/dragon-drop-vue/blob/main/lib/DragonDropVue.ts#L15C13-L15C27)
+  * [usage](https://github.com/nruffing/dragon-drop-vue/blob/main/lib/htmlHelpers.ts#L32C3-L32C17)
+* [data-grid-vue](https://datagridvue.com)
+  * setup via dragon-drop-vue plugin
+  * [usage](https://github.com/nruffing/data-grid-vue/blob/main/lib/components/DataGridVue.vue#L791C33-L791C47)
+
 ## Install
 
 ```
@@ -149,6 +158,10 @@ The following debounce behavior modes are available via the `DebounceMode` enum.
 | `MaximumFrequency` |  Debounce using a maximum frequency. The function will be called immediately and then at most once every timeout. Debounced calls will always use the latest arguments. The debounce function will be called even if its been called within the timeout. |
 
 ## Release Notes
+
+### v1.4.1
+  * Rev development dependencies. This addresses the security vulnerabilities reported in package [`ip`](https://github.com/nruffing/native-event-vue/security/dependabot/6).
+  * Add example usages to readme.
 
 ### v1.4.0
   * Add option to call `preventDefault` on all events including ones that are debounced. For example. to ensure that the drop event always fires as expected, you should always include a `preventDefault` call in the part of your code which handles the dragover event. |

@@ -8,7 +8,7 @@ export type NativeEvent = { destroy: () => void } | undefined
 
 /**
  * Composable to attach an HTML native event to an element.
- * @param domEl The DOM element or window to attach the event listener to.
+ * @param target The event target (e.g. DOM element or window) to attach the event listener to.
  * @param event The name of the native event (e.g. `resize`).
  * @param listener The event handler function to attach. This is the same type as the browser
  * API [`addEventListener.listener` parameter](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback).
@@ -21,7 +21,7 @@ export type NativeEvent = { destroy: () => void } | undefined
  * @returns {@link NativeEvent} object with a destroy method to remove the event listener.
  */
 export function useNativeEvent(
-  domEl: HTMLElement | (Window & typeof globalThis),
+  target: EventTarget,
   event: string,
   listener: EventListenerOrEventListenerObject,
   options?: boolean | AddEventListenerOptions,
@@ -31,7 +31,7 @@ export function useNativeEvent(
   preventDefaultAllDebouncedEvents?: boolean,
 ): NativeEvent {
   const ensure = useEnsure('useNativeEvent')
-  ensure.ensureExists(domEl, 'domEl')
+  ensure.ensureExists(target, 'target')
   ensure.ensureExists(event, 'event')
   ensure.ensureExists(listener, 'listener')
 
@@ -44,10 +44,10 @@ export function useNativeEvent(
   }
 
   const eventPropNamePrefix = resolveEventPropNamePrefix(event)
-  const existing = domEl[eventPropNamePrefix]
+  const existing = target[eventPropNamePrefix]
   if (existing) {
     if (replaceExisting) {
-      log('useNativeEvent | replacing existing listener', { domEl, event, options, debounceMs, debounceMode, replaceExisting })
+      log('useNativeEvent | replacing existing listener', { target, event, options, debounceMs, debounceMode, replaceExisting })
       existing.destroy()
     } else {
       return
@@ -60,23 +60,23 @@ export function useNativeEvent(
     if (debounceMs) {
       ;(listenerRef.value as DebouncedFunction).destroy()
     }
-    domEl[eventPropNamePrefix] = undefined
-    domEl.removeEventListener(event, listenerRef.value, options)
-    log('useNativeEvent | event listener removed', { domEl, event, options, debounceMs, debounceMode, replaceExisting })
+    target[eventPropNamePrefix] = undefined
+    target.removeEventListener(event, listenerRef.value, options)
+    log('useNativeEvent | event listener removed', { target, event, options, debounceMs, debounceMode, replaceExisting })
   }
 
   if (debounceMs) {
     const debounced = useDebounce(listener, debounceMs, debounceMode, preventDefaultAllDebouncedEvents)
     listenerRef.value = debounced
-    log('useNativeEvent | event listener debounced', { domEl, event, options, debounceMs, debounceMode, replaceExisting })
+    log('useNativeEvent | event listener debounced', { target, event, options, debounceMs, debounceMode, replaceExisting })
   }
 
-  domEl.addEventListener(event, listenerRef.value, options)
+  target.addEventListener(event, listenerRef.value, options)
 
   const result = { destroy: removeListener }
-  domEl[eventPropNamePrefix] = result
+  target[eventPropNamePrefix] = result
 
-  log('useNativeEvent | event listener added', { domEl, event, options, debounceMs, debounceMode, replaceExisting })
+  log('useNativeEvent | event listener added', { target, event, options, debounceMs, debounceMode, replaceExisting })
 
   return result
 }
